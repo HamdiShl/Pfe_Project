@@ -1,0 +1,35 @@
+body{
+  background-color: rgba(5, 60, 68, 0.856)
+  
+}
+.navbar-nav li a {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px 15px;
+}
+
+.navbar-nav li a:hover {
+  background-color: #0069d9;
+  border: 1px solid #0062cc;
+  color: #fff;
+}
+
+background{
+    width: 430px;
+    height: 520px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: burlywood;
+  text-align: center;
+  line-height: 60px;
+}

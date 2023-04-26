@@ -2,16 +2,39 @@ from django.db import models
 
 # Create your models here.
 
+# models.py
+from django.db import models
 
-class Capteurs(models.Model):
-    temperature = models.DecimalField(max_digits=5, decimal_places=2)
-    humidite = models.DecimalField(max_digits=5, decimal_places=2)
-    courant = models.DecimalField(max_digits=5, decimal_places=2)
-    luminosite = models.DecimalField(max_digits=5, decimal_places=2)
-    date_mesure = models.DateTimeField(auto_now_add=True)
+class TemperatureData(models.Model):
+    timestamp = models.DateTimeField()
+    temperature = models.FloatField()
 
-class Actionneur(models.Model):
-    regulateur_charge = models.CharField(max_length=100)
-    date_mesure = models.DateTimeField(auto_now_add=True)
+class HumidityData(models.Model):
+    timestamp = models.DateTimeField()
+    humidity = models.FloatField()
+
+class LightData(models.Model):
+    timestamp = models.DateTimeField()
+    light = models.FloatField()
+
+
+
+class SensorData(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    temperature = models.FloatField()
+    humidity = models.FloatField()
+
+    def __str__(self):
+        return f"SensorData ({self.timestamp})"
+
+
+class Battery(models.Model):
+    maxVotage=models.FloatField(max_length=100,null=True)
+    minVoltage=models.FloatField(max_length=100,null=True)
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    def __str__(self):
+        return str(self.maxVotage)+"%"
+
+
 
 

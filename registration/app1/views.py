@@ -2,14 +2,40 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Capteurs, Actionneur
-from datetime import datetime
+from .models import TemperatureData, HumidityData, LightData
+
+
 # Create your views here.
 
 
 @login_required(login_url='login')
 def HomePage(request):
     return render(request, 'home.html')
+
+def acceuilPage(request):
+    return render(request, 'acceuil.html')
+
+def dashboard(request):
+    # Include primary key field in raw queries
+    latest_temperature = TemperatureData.objects.using('default').raw('SELECT id, temperature FROM sensor_app_sensordata ORDER BY timestamp DESC LIMIT 1')
+    latest_humidity = HumidityData.objects.using('default').raw('SELECT id, humidity FROM sensor_app_sensordata ORDER BY timestamp DESC LIMIT 1')
+    latest_light = LightData.objects.using('default').raw('SELECT id, light_level FROM light_data ORDER BY timestamp DESC LIMIT 1')
+    
+    # Extract the values from RawQuerySet objects
+    latest_temperature_value = next(iter(latest_temperature)).temperature
+    latest_humidity_value = next(iter(latest_humidity)).humidity
+    latest_light_value = next(iter(latest_light)).light_level
+    
+    # pass the extracted values to the template context
+    context = {
+        'latest_temperature': latest_temperature_value,
+        'latest_humidity': latest_humidity_value,
+        'latest_light': latest_light_value,
+    }
+    return render(request,'dashboard.html', context)
+
+
+
 
 
 def SignupPage(request):
@@ -49,13 +75,7 @@ def LogoutPage(request):
     return redirect('login')
 
 
-def create_capteurs(request):
-    capteurs = Capteurs.objects.create(
-        temperature=25.5, humidite=60.0, courant=2.5, luminosite=2500)
-    return render(request, 'create_capteurs.html', {'capteurs': capteurs})
 
 
-def create_actionneur(request):
-    actionneur = Actionneur.objects.create(
-        regulateur_charge='Type A', date_mesure=datetime.now())
-    return render(request, 'create_actionneur.html', {'actionneur': actionneur})
+
+
